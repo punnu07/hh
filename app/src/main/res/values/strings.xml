@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">hh</string>
     <string name="hyperlink">Not a Member?<a href="">Sign Up</a></string>
+    <string name="title_activity_subscribers">ScrollingActivity</string>
+    <string name="large_text">
+
+    </string>
+    <string name="action_settings">Settings</string>
 </resources>

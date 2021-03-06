@@ -25,7 +25,16 @@ import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jivesoftware.smackx.iqregister.AccountManager;
 
+import org.jivesoftware.smack.roster.*; /*you may have been missing this*/
+import org.jivesoftware.smack.*;
+import org.jivesoftware.smack.tcp.*;
+import java.util.Collection; /*optional*/
+
+
+
 import java.io.IOException;
+
+import org.jivesoftware.smack.roster.*;
 
 public class register extends AppCompatActivity {
 
@@ -65,7 +74,9 @@ public class register extends AppCompatActivity {
 
 
 
+                //if account is created go to profile of the client
 
+                /*
                 if(IsAccountCreated)
                 {
                     Intent intent = new Intent(context, profile.class);
@@ -83,6 +94,8 @@ public class register extends AppCompatActivity {
                     intent.putExtra(EXTRA_NAME, username);
                     startActivity(intent);
                 }
+
+                 */
 
             }
         });
@@ -167,24 +180,91 @@ public class register extends AppCompatActivity {
                 }
 
 
+
+
+
+
+
                 //at this point disconnect
                 connection.disconnect();
                 IsAccountCreated=true;
 
 
 
+                //at this point login as the client
+
+
+                /*
+                Username=uname;
+                Password=pword;
+
+
+
+                config = XMPPTCPConnectionConfiguration.builder()
+                        .setUsernameAndPassword(Username, Password)
+                        .setServiceName("localhost")
+                        .setHost("3.139.90.132")
+                        .setPort(5222)
+                        .setConnectTimeout(25000)
+                        .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled) // Do not disable TLS except for test purposes!
+                        .setDebuggerEnabled(true)
+                        .setSendPresence(true)
+                        .build();
+
+
+
+                connection = new XMPPTCPConnection(config);
+                ((XMPPTCPConnection) connection).setUseStreamManagement(true);           //changed from false to true
+                ((XMPPTCPConnection) connection).setUseStreamManagementResumption(true); //added
+                try {
+                    connection.connect().login();
+                } catch (XMPPException e) {
+                    e.printStackTrace();
+                } catch (SmackException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+                if(connection.isAuthenticated()) {
+
+                    Roster roster = Roster.getInstanceFor(connection);
+
+                    roster.setSubscriptionMode(Roster.SubscriptionMode.manual);
+                    try {
+                        roster.createEntry(uname, "userB@abc.com", null);
+                    } catch (SmackException.NotLoggedInException e) {
+                        e.printStackTrace();
+                    } catch (SmackException.NoResponseException e) {
+                        e.printStackTrace();
+                    } catch (XMPPException.XMPPErrorException e) {
+                        e.printStackTrace();
+                    } catch (SmackException.NotConnectedException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    connection.disconnect();
+                }
+
+                */
 
 
 
 
-            }
-            else
-            {// authentication error
-                //Intent intent = new Intent(context, MainActivity.class);
-                //startActivity(intent);
 
-            }
 
+
+
+
+
+
+
+
+
+
+                }
 
             return null;
         }

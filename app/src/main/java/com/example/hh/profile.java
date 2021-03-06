@@ -70,6 +70,27 @@ public class profile extends AppCompatActivity {
         });
 
 
+        //handler for logout button
+        Button logout_button= findViewById(R.id.logoutbutton);
+        logout_button.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+
+              if(connection.isConnected())
+              {
+                  connection.disconnect();
+                  uname="";
+                  pword="";
+                  Intent intent = new Intent(context, profile.class);
+                  startActivity(intent);
+
+              }
+
+
+
+            }
+        });
+
+
 
 
 
@@ -195,22 +216,11 @@ public class profile extends AppCompatActivity {
 
 
 
-            String userName=uname.trim();
-            String password=pword.trim();
+            String userName=uname;
+            String password=pword;
 
 
 
-
-
-            //TextView tv=findViewById(R.id.incomingmessage);
-            //tv.setText(message.getBody());
-          //   tv.setText(uname+" 1 "+pword);
-
-
-
-
-//            String userName="rony";
- //           String password="ronypreacher";
 
 
 
