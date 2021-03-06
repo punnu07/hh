@@ -156,6 +156,7 @@ public class profile extends AppCompatActivity {
                 }
 
 
+                et.setText("");
             }//send message end
 
 

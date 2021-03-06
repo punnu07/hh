@@ -28,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="132dp"
+        android:layout_marginTop="76dp"
         android:layout_marginEnd="16dp"
         android:ems="10"
         android:hint="username"
@@ -42,12 +42,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:backgroundTint="#6EA470"
         android:text="Login"
+        app:iconTint="#985D5D"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_password"
-        app:layout_constraintVertical_bias="0.03" />
+        app:layout_constraintVertical_bias="0.435" />
 
     <TextView
         android:id="@+id/notamember"
@@ -60,6 +63,35 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Login"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ToggleButton
+        android:id="@+id/role"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="69dp"
+        android:background="#F8F4F4"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textOff="Believer"
+        android:textOn="Teacher"
+        app:layout_constraintBottom_toTopOf="@+id/Login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/rolelabel"
+        android:layout_width="135dp"
+        android:layout_height="34dp"
+        android:layout_marginTop="41dp"
+        android:layout_marginBottom="5dp"
+        android:text="I am a"
+        android:textAlignment="center"
+        android:textColor="#3445A2"
+        app:layout_constraintBottom_toTopOf="@+id/role"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login_password"
         app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

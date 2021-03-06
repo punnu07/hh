@@ -44,6 +44,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -74,27 +75,43 @@ public class MainActivity extends AppCompatActivity {
         Button login_button= findViewById(R.id.Login);
         login_button.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
-                Intent intent = new Intent(context, profile.class);
+
+                final ToggleButton tB = (ToggleButton) findViewById(R.id.role);
+
+                if(tB.isChecked()){
+                    //preacher case
+                    Intent intent = new Intent(context, preacher.class);
+                    startActivity(intent);
 
 
-                String uname;
-                String pword;
-                EditText et=findViewById(R.id.login_username);
-                uname=et.getText().toString();
+                }
+                else
+                {
 
-                EditText etp=findViewById(R.id.login_password);
-                pword=etp.getText().toString();
+                    Intent intent = new Intent(context, profile.class);
+                    String uname;
+                    String pword;
+                    EditText et=findViewById(R.id.login_username);
+                    uname=et.getText().toString();
 
-                intent.putExtra(EXTRA_PWD, pword);
-                intent.putExtra(EXTRA_NAME, uname);
+                    EditText etp=findViewById(R.id.login_password);
+                    pword=etp.getText().toString();
 
+                    intent.putExtra(EXTRA_PWD, pword);
+                    intent.putExtra(EXTRA_NAME, uname);
+                    startActivity(intent);
+                }
+                //Button is OFF
 
-                startActivity(intent);
-            }
+            }//end of click
         });
 
 
-    }
+
+        //toggle button handler
+
+
+    }//end of on create
 
 
 
