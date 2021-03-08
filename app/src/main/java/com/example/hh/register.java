@@ -25,6 +25,23 @@ import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jivesoftware.smackx.iqregister.AccountManager;
 
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.jxmpp.jid.EntityBareJid;
+import org.jxmpp.jid.impl.JidCreate;
+import org.jxmpp.stringprep.XmppStringprepException;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import java.io.File;
+
 import org.jivesoftware.smack.roster.*; /*you may have been missing this*/
 import org.jivesoftware.smack.*;
 import org.jivesoftware.smack.tcp.*;
@@ -39,17 +56,15 @@ import org.jivesoftware.smack.roster.*;
 public class register extends AppCompatActivity {
 
 
-    public static final String EXTRA_NAME="a" ;
-    public static final String EXTRA_PWD ="b";
+    public static final String EXTRA_NAME = "a";
+    public static final String EXTRA_PWD = "b";
 
-    final Context context=this;
+    final Context context = this;
 
 
     public String uname;
     public String pword;
-    public boolean IsAccountCreated=false;
-
-
+    public boolean IsAccountCreated = false;
 
 
     AbstractXMPPConnection connection;
@@ -59,19 +74,12 @@ public class register extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
 
-
-
-
-
         //handler for register button
-        Button register_button= findViewById(R.id.Register);
-        register_button.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
+        Button register_button = findViewById(R.id.Register);
+        register_button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
 
                 new createnewuser().execute();
-
-
-
 
 
                 //if account is created go to profile of the client
@@ -101,35 +109,25 @@ public class register extends AppCompatActivity {
         });
 
 
-
-
     }//end  of oncreate
-
-
-
 
     //starting of inner class
     private class createnewuser extends AsyncTask<Void, Void, Void> {
         String result;
+
         @Override
         protected Void doInBackground(Void... voids) {
 
 
-            EditText et=(EditText)findViewById(R.id.register_username);
-            uname=et.getText().toString();
+            EditText et = (EditText) findViewById(R.id.register_username);
+            uname = et.getText().toString();
 
-            EditText etp=(EditText)findViewById(R.id.register_password);
-            pword=etp.getText().toString();
-
-
+            EditText etp = (EditText) findViewById(R.id.register_password);
+            pword = etp.getText().toString();
 
 
-
-            String Username="admin";
-            String Password="punnooseak";
-
-
-
+            String Username = "admin";
+            String Password = "punnooseak";
 
 
 //login as admin
@@ -143,7 +141,6 @@ public class register extends AppCompatActivity {
                     .setDebuggerEnabled(true)
                     .setSendPresence(true)
                     .build();
-
 
 
             connection = new XMPPTCPConnection(config);
@@ -160,15 +157,13 @@ public class register extends AppCompatActivity {
             }
 
 
-
-            if(connection.isAuthenticated())
-            {
+            if (connection.isAuthenticated()) {
                 //create new user
                 AccountManager accountManager = AccountManager.getInstance(connection);
                 try {
                     if (accountManager.supportsAccountCreation()) {
                         accountManager.sensitiveOperationOverInsecureConnection(true);
-                        accountManager.createAccount(uname,pword);
+                        accountManager.createAccount(uname, pword);
 
                     }
                 } catch (SmackException.NoResponseException e) {
@@ -180,99 +175,130 @@ public class register extends AppCompatActivity {
                 }
 
 
-
-
-
-
-
                 //at this point disconnect
                 connection.disconnect();
-                IsAccountCreated=true;
+                IsAccountCreated = true;
 
 
+            }//end of connection as localhost
 
-                //at this point login as the client
 
+            //at this point login as the client
+            Username = uname;
+            Password = pword;
+
+
+            config = XMPPTCPConnectionConfiguration.builder()
+                    .setUsernameAndPassword(Username, Password)
+                    .setServiceName("localhost")
+                    .setHost("3.139.90.132")
+                    .setPort(5222)
+                    .setConnectTimeout(25000)
+                    .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled) // Do not disable TLS except for test purposes!
+                    .setDebuggerEnabled(true)
+                    .setSendPresence(true)
+                    .build();
+
+
+            connection = new XMPPTCPConnection(config);
+            ((XMPPTCPConnection) connection).setUseStreamManagement(true);           //changed from false to true
+            ((XMPPTCPConnection) connection).setUseStreamManagementResumption(true); //added
+            try {
+                connection.connect().login();
+            } catch (XMPPException e) {
+                e.printStackTrace();
+            } catch (SmackException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+            //roster
+
+            if (connection.isAuthenticated()) {
 
                 /*
-                Username=uname;
-                Password=pword;
+                Roster roster = Roster.getInstanceFor(connection);
 
-
-
-                config = XMPPTCPConnectionConfiguration.builder()
-                        .setUsernameAndPassword(Username, Password)
-                        .setServiceName("localhost")
-                        .setHost("3.139.90.132")
-                        .setPort(5222)
-                        .setConnectTimeout(25000)
-                        .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled) // Do not disable TLS except for test purposes!
-                        .setDebuggerEnabled(true)
-                        .setSendPresence(true)
-                        .build();
-
-
-
-                connection = new XMPPTCPConnection(config);
-                ((XMPPTCPConnection) connection).setUseStreamManagement(true);           //changed from false to true
-                ((XMPPTCPConnection) connection).setUseStreamManagementResumption(true); //added
+                roster.setSubscriptionMode(Roster.SubscriptionMode.manual);
                 try {
-                    connection.connect().login();
-                } catch (XMPPException e) {
+                    roster.createEntry(uname, "userB@abc.com", null);
+                } catch (SmackException.NotLoggedInException e) {
                     e.printStackTrace();
-                } catch (SmackException e) {
+                } catch (SmackException.NoResponseException e) {
                     e.printStackTrace();
-                } catch (IOException e) {
+                } catch (XMPPException.XMPPErrorException e) {
                     e.printStackTrace();
-                }
-
-
-                if(connection.isAuthenticated()) {
-
-                    Roster roster = Roster.getInstanceFor(connection);
-
-                    roster.setSubscriptionMode(Roster.SubscriptionMode.manual);
-                    try {
-                        roster.createEntry(uname, "userB@abc.com", null);
-                    } catch (SmackException.NotLoggedInException e) {
-                        e.printStackTrace();
-                    } catch (SmackException.NoResponseException e) {
-                        e.printStackTrace();
-                    } catch (XMPPException.XMPPErrorException e) {
-                        e.printStackTrace();
-                    } catch (SmackException.NotConnectedException e) {
-                        e.printStackTrace();
-                    }
-
-
-                    connection.disconnect();
+                } catch (SmackException.NotConnectedException e) {
+                    e.printStackTrace();
                 }
 
                 */
 
 
+                String InitialMessageToPreacher = "";
 
 
+                //at this point send an initial message to the preacher
+                //create xml from message
 
+                /*
+                try {
+                    DocumentBuilderFactory dbFactory =
+                            DocumentBuilderFactory.newInstance();
+                    DocumentBuilder dBuilder = null;
+                    dBuilder = dbFactory.newDocumentBuilder();
+                    Document doc = dBuilder.newDocument();
 
+                    Element rootElement = doc.createElement("message");
+                    doc.appendChild(rootElement);
 
+                    Attr attr = doc.createAttribute("type");
+                    attr.setValue("1");
+                    rootElement.setAttributeNode(attr);
+                    InitialMessageToPreacher = doc.toString();
 
+                } catch (ParserConfigurationException e) {
 
-
-
-
-
-
-
+                    e.printStackTrace();
                 }
 
+                 */
+
+
+                //create an xml message manually
+                InitialMessageToPreacher="<message><name>"+uname+"</name></message>";
+
+
+
+                //send the message to the preacher
+                String toPerson = "rony@localhost";
+                EntityBareJid jid = null;
+                ChatManager chatManager = ChatManager.getInstanceFor(connection);
+                try {
+                    jid = JidCreate.entityBareFrom(toPerson);
+                } catch (XmppStringprepException ex) {
+                    ex.printStackTrace();
+                }
+                Chat chat = chatManager.createChat(String.valueOf(jid));
+                try {
+                    chat.sendMessage(InitialMessageToPreacher);
+                } catch (SmackException.NotConnectedException es) {
+                    es.printStackTrace();
+                }
+
+
+                //disconnect
+                connection.disconnect();
+            }
+
+
             return null;
-        }
+        }// end of doinbackground function
 
 
     }//end of inner class
-
-
 
 
 }//end of outer class

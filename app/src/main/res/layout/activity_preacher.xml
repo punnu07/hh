@@ -24,19 +24,21 @@
         android:id="@+id/Post"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="148dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="132dp"
         android:backgroundTint="#6EA470"
         android:text="Post"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Preacher_Message" />
 
     <EditText
         android:id="@+id/Preacher_Message"
-        android:layout_width="300dp"
-        android:layout_height="399dp"
-        android:layout_marginBottom="567dp"
+        android:layout_width="336dp"
+        android:layout_height="365dp"
+        android:layout_marginBottom="2dp"
         android:ems="10"
         android:gravity="start|top"
         android:hint="Draft your message "
@@ -48,13 +50,16 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
-        android:id="@+id/viewusersbutton"
+        android:id="@+id/preacherlogoutbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:backgroundTint="#6EA470"
-        android:text="Believers List"
+        android:text="Logout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Post" />
+        app:layout_constraintTop_toBottomOf="@+id/Post"
+        app:layout_constraintVertical_bias="1.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

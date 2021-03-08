@@ -81,7 +81,18 @@ public class MainActivity extends AppCompatActivity {
                 if(tB.isChecked()){
                     //preacher case
                     Intent intent = new Intent(context, preacher.class);
-                    startActivity(intent);
+                    String uname;
+                    String pword;
+                    EditText et=findViewById(R.id.login_username);
+                    uname=et.getText().toString();
+
+                    EditText etp=findViewById(R.id.login_password);
+                    pword=etp.getText().toString();
+
+                    intent.putExtra(EXTRA_PWD, pword);
+                    intent.putExtra(EXTRA_NAME, uname);
+
+                   startActivity(intent);
 
 
                 }

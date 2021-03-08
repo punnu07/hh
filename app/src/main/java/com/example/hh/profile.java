@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.DocumentsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -28,6 +29,23 @@ import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.stringprep.XmppStringprepException;
 
 import java.io.IOException;
+
+
+
+import java.io.StringReader;
+import java.io.StringWriter;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
 
 public class profile extends AppCompatActivity {
 
@@ -80,7 +98,7 @@ public class profile extends AppCompatActivity {
                   connection.disconnect();
                   uname="";
                   pword="";
-                  Intent intent = new Intent(context, profile.class);
+                  Intent intent = new Intent(context, MainActivity.class);
                   startActivity(intent);
 
               }
@@ -108,14 +126,6 @@ public class profile extends AppCompatActivity {
         String result;
         @Override
         protected Void doInBackground(Void... voids) {
-
-
-
-
-
-
-
-
 
 
 
@@ -177,6 +187,7 @@ public class profile extends AppCompatActivity {
                 }
 
 
+                //clear the chat window
                 et.setText("");
             }//send message end
 
@@ -208,7 +219,7 @@ public class profile extends AppCompatActivity {
 
 
 
-
+// listen to the server and  display any messages
     private class connecttoserver extends AsyncTask<Void, Void, Void> {
         String result;
         @Override
@@ -218,12 +229,6 @@ public class profile extends AppCompatActivity {
 
             String userName=uname;
             String password=pword;
-
-
-
-
-
-
 
 
             XMPPTCPConnectionConfiguration config = XMPPTCPConnectionConfiguration.builder()
@@ -272,8 +277,15 @@ public class profile extends AppCompatActivity {
                                               public void run()
                                               {
                                                   TextView tv=findViewById(R.id.incomingmessage);
-                                                  tv.setText(message.getBody());
-                                                 // tv.setText(userName);
+
+                                                  //check whether incoming message is an xml type format
+                                                  int valid_xml=CheckforXML(message.getBody());
+                                                   if(valid_xml==0)
+                                                   {
+                                                       tv.setText(message.getBody());
+                                                   }
+
+
                                               }
 
                                             });
@@ -296,10 +308,24 @@ public class profile extends AppCompatActivity {
 
 
             return null;
+        }//end of do in background
+
+
+
+
+
+    int CheckforXML(String ms)
+    {
+        try {
+            DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(ms)));
+              return 1;
+        } catch (Exception e) {
+            return 0;
         }
+    }
 
 
     }//end of inner class
 
 
-}
+}//end of outer class
