@@ -70,12 +70,19 @@ public class profile extends AppCompatActivity {
         uname=getIntent().getStringExtra(MainActivity.EXTRA_NAME);
         pword=getIntent().getStringExtra(MainActivity.EXTRA_PWD);
 
+
+        TextView tv=findViewById(R.id.incomingmessage);
+        DatabaseAdaptor db = new DatabaseAdaptor(this);
+
+        tv.setText(db.getCurrentMessage());
+
+        //listening to the server
         new connecttoserver().execute();
 
 
 
 
-
+        //sending message back to
         Button send_button= findViewById(R.id.send_button);
         send_button.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
@@ -276,15 +283,18 @@ public class profile extends AppCompatActivity {
                                         runOnUiThread(new Runnable(){
                                               public void run()
                                               {
-                                                  TextView tv=findViewById(R.id.incomingmessage);
+
 
                                                   //check whether incoming message is an xml type format
-                                                  int valid_xml=CheckforXML(message.getBody());
-                                                   if(valid_xml==0)
-                                                   {
-                                                       tv.setText(message.getBody());
-                                                   }
+                                                  //if it is an xml its roster request meant for the admin.
+                                                  //otherwise  store it and display it
 
+                                                  int valid_xml=CheckforXML(message.getBody());
+                                                  if(valid_xml==0)
+                                                  {
+                                                     StringHandler sh=new StringHandler();
+                                                     sh.set(message.getBody());
+                                                  }
 
                                               }
 
@@ -326,6 +336,32 @@ public class profile extends AppCompatActivity {
 
 
     }//end of inner class
+
+
+
+
+
+    private class StringHandler  {
+
+
+        String  message;
+        public void set(String ms)
+        {
+            message=ms;
+            DatabaseAdaptor db = new DatabaseAdaptor(context);
+            db.truncatetable();
+            db.addMessage(message,"");
+
+        }
+        public String get()
+        {
+
+            return message;
+        }
+
+    }
+
+
 
 
 }//end of outer class

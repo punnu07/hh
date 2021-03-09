@@ -10,6 +10,7 @@ import android.provider.DocumentsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,15 +24,20 @@ import org.jivesoftware.smack.chat.ChatManagerListener;
 import org.jivesoftware.smack.chat.ChatMessageListener;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.roster.Roster;
+import org.jivesoftware.smack.roster.RosterEntry;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 
+import org.jxmpp.jid.EntityBareJid;
+import org.jxmpp.jid.impl.JidCreate;
+import org.jxmpp.stringprep.XmppStringprepException;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Collection;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -76,7 +82,10 @@ public class preacher extends AppCompatActivity {
         post_button.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
 
+                new sendmessagetoallsubscribers().execute();
 
+
+                //Toast.makeText(preacher.this,  "Posted",  Toast.LENGTH_LONG).show();
             }
         });
 
@@ -246,6 +255,10 @@ public class preacher extends AppCompatActivity {
                                 Log.w("app", chat.toString());
                             }// end of chat created
                         });
+
+
+
+
             }//end of received message
 
 
@@ -282,6 +295,112 @@ public class preacher extends AppCompatActivity {
             }
             return null;
         }
+
+
+
+
+    }//end of inner class
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //new class for sending  message to all the clients
+    private class sendmessagetoallsubscribers extends AsyncTask<Void, Void, Void> {
+        String result;
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+
+
+            String userName=uname;
+            String password=pword;
+
+
+            String MessageToSend="";
+
+            EditText et=findViewById(R.id.Preacher_Message);
+            MessageToSend=et.getText().toString();
+
+
+
+
+            //already connected
+            if(connection.isAuthenticated())
+            {
+
+
+                //get the roster list
+                Roster roster = Roster.getInstanceFor(connection);
+
+                if (!roster.isLoaded()) {
+                    try {
+                        roster.reloadAndWait();
+                    } catch (SmackException.NotLoggedInException e) {
+                        e.printStackTrace();
+                    } catch (SmackException.NotConnectedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                Collection <RosterEntry> entries = roster.getEntries();
+
+                for (RosterEntry entry : entries)
+                {
+
+
+                    String toPerson=entry.getName();
+
+                    EntityBareJid jid = null;
+                    ChatManager chatManager = ChatManager.getInstanceFor(connection);
+                    try {
+                        jid = JidCreate.entityBareFrom(toPerson);
+                    } catch (XmppStringprepException e) {
+                        e.printStackTrace();
+                    }
+                    Chat chat = chatManager.createChat(String.valueOf(jid));
+                    try {
+                        chat.sendMessage(MessageToSend);
+                    } catch (SmackException.NotConnectedException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    //clear the chat window
+                    et.setText("");
+                    et=findViewById(R.id.preacher_message_subject);
+                    et.setText("");
+                }
+
+
+
+
+
+
+
+
+
+
+            }//end of connection
+
+
+            return null;
+        }//end of do in background
+
+
 
 
 
