@@ -6,13 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.DocumentsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smack.ConnectionConfiguration;
@@ -24,42 +24,39 @@ import org.jivesoftware.smack.chat.ChatManagerListener;
 import org.jivesoftware.smack.chat.ChatMessageListener;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.roster.Roster;
-import org.jivesoftware.smack.roster.RosterEntry;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
-
-import org.jxmpp.jid.EntityBareJid;
-import org.jxmpp.jid.impl.JidCreate;
-import org.jxmpp.stringprep.XmppStringprepException;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.Collection;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-public class preacher extends AppCompatActivity {
-
+public class PreacherLandingPage extends AppCompatActivity {
 
     final Context context=this;
     public String uname="";
     public String pword="";
-
-
     AbstractXMPPConnection connection;
+
+
+    public static final String EXTRA_NAME="a" ;
+    public static final String EXTRA_PWD ="b";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_preacher);
+        setContentView(R.layout.activity_preacher_landing_page);
 
-        uname=getIntent().getStringExtra(PreacherLandingPage.EXTRA_NAME);
-        pword=getIntent().getStringExtra(PreacherLandingPage.EXTRA_PWD);
+
+        uname=getIntent().getStringExtra(MainActivity.EXTRA_NAME);
+        pword=getIntent().getStringExtra(MainActivity.EXTRA_PWD);
 
 
         //check whether preacher logged correctly
@@ -68,30 +65,35 @@ public class preacher extends AppCompatActivity {
 
             Intent intent = new Intent(context, MainActivity.class);
             startActivity(intent);
+
         }
 
-
-        //listen to server for any xmls
-        new preacher.listentoserver().execute();
-
+         //listen for any initiation message
+        new listenForInitiationMessage().execute();
 
 
-        //handler for post button
-        Button post_button= findViewById(R.id.Post);
+        Button post_button= findViewById(R.id.PreacherLandingPagePostButton);
         post_button.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
 
-                new sendmessagetoallsubscribers().execute();
+
+                    Intent intent = new Intent(context, preacher.class);
+
+                    intent.putExtra(EXTRA_PWD, pword);
+                    intent.putExtra(EXTRA_NAME, uname);
+
+                    startActivity(intent);
 
 
-                //Toast.makeText(preacher.this,  "Posted",  Toast.LENGTH_LONG).show();
-            }
+
+
+            }//end of click
         });
 
 
-        //handler for logout
-        Button preacherlogout= findViewById(R.id.preacherlogoutbutton);
-        preacherlogout.setOnClickListener(new View.OnClickListener(){
+
+        Button preacherlandingpagelogout= findViewById(R.id.PreacherLandingPageLogoutButton);
+        preacherlandingpagelogout.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
 
 
@@ -113,9 +115,7 @@ public class preacher extends AppCompatActivity {
 
 
 
-    }//end of oncreate function
-
-
+    }//end of oncreate
 
 
 
@@ -124,7 +124,7 @@ public class preacher extends AppCompatActivity {
 
     // listen to the server
     //this handles  initiation messages from the clients
-    private class listentoserver extends AsyncTask<Void, Void, Void> {
+    private class listenForInitiationMessage extends AsyncTask<Void, Void, Void> {
         String result;
         @Override
         protected Void doInBackground(Void... voids) {
@@ -182,7 +182,7 @@ public class preacher extends AppCompatActivity {
                                         runOnUiThread(new Runnable(){
                                             public void run()
                                             {
-                                                TextView tv=findViewById(R.id.incomingmessage);
+
 
                                                 //check whether incoming message is an xml type format
                                                 int valid_xml=CheckforXML(message.getBody());
@@ -207,23 +207,28 @@ public class preacher extends AppCompatActivity {
                                                     } catch (SAXException e) {
                                                         e.printStackTrace();
                                                     }
-                                                    String newusername = doc.getElementsByTagName("name").item(0).getTextContent();
-                                                    String jid=newusername+"@localhost";
-                                                    Toast.makeText(getApplicationContext(),  newusername,  Toast.LENGTH_LONG);
 
-                                                  Roster roster = Roster.getInstanceFor(connection);
-                                                  roster.setSubscriptionMode(Roster.SubscriptionMode.accept_all);
-                                                    try {
-                                                        roster.createEntry(newusername, jid, null);
-                                                    } catch (SmackException.NotLoggedInException e) {
-                                                        e.printStackTrace();
-                                                    } catch (SmackException.NoResponseException e) {
-                                                        e.printStackTrace();
-                                                    } catch (XMPPException.XMPPErrorException e) {
-                                                        e.printStackTrace();
-                                                    } catch (SmackException.NotConnectedException e) {
-                                                        e.printStackTrace();
-                                                    }
+                                                    //check if the type==1
+                                                    String type=doc.getElementsByTagName("type").item(0).getTextContent();
+                                                        String newusername = doc.getElementsByTagName("name").item(0).getTextContent();
+                                                        String jid = newusername + "@localhost";
+
+                                                        Toast.makeText(getApplicationContext(), newusername, Toast.LENGTH_LONG);
+                                                    if(type.equals("one")) {
+                                                        Roster roster = Roster.getInstanceFor(connection);
+                                                        roster.setSubscriptionMode(Roster.SubscriptionMode.accept_all);
+                                                        try {
+                                                            roster.createEntry(newusername, jid, null);
+                                                        } catch (SmackException.NotLoggedInException e) {
+                                                            e.printStackTrace();
+                                                        } catch (SmackException.NoResponseException e) {
+                                                            e.printStackTrace();
+                                                        } catch (XMPPException.XMPPErrorException e) {
+                                                            e.printStackTrace();
+                                                        } catch (SmackException.NotConnectedException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    }//end of type =1
 
                                                 }//end of valid xml
 
@@ -284,125 +289,11 @@ public class preacher extends AppCompatActivity {
 
 
 
-    }//end of inner class
+    }
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-    //new class for sending  message to all the clients
-    private class sendmessagetoallsubscribers extends AsyncTask<Void, Void, Void> {
-        String result;
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-
-
-            String userName=uname;
-            String password=pword;
-
-            EditText et, ett;
-
-
-
-
-            et=findViewById(R.id.preacher_message_subject);
-            ett=findViewById(R.id.Preacher_Message);
-            String preachermessagesubject=et.getText().toString();
-            String preachermessage=ett.getText().toString();
-
-            //String MessageToSend= "<message><preachermessagesubject>" +preachermessagesubject+ "</preachermessagesubject><preachermessage>" +preachermessage+ "</preachermessage></message>";
-            String MessageToSend = preachermessagesubject+"\n\n"+preachermessage;
-
-
-
-            //already connected
-            if(connection.isAuthenticated())
-            {
-
-                //get the roster list
-                Roster roster = Roster.getInstanceFor(connection);
-
-                if (!roster.isLoaded()) {
-                    try {
-                        roster.reloadAndWait();
-                    } catch (SmackException.NotLoggedInException e) {
-                        e.printStackTrace();
-                    } catch (SmackException.NotConnectedException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                Collection <RosterEntry> entries = roster.getEntries();
-
-                for (RosterEntry entry : entries)
-                {
-
-
-                    String toPerson=entry.getName();
-
-                    EntityBareJid jid = null;
-                    ChatManager chatManager = ChatManager.getInstanceFor(connection);
-                    try {
-                        jid = JidCreate.entityBareFrom(toPerson);
-                    } catch (XmppStringprepException e) {
-                        e.printStackTrace();
-                    }
-                    Chat chat = chatManager.createChat(String.valueOf(jid));
-                    try {
-                        chat.sendMessage(MessageToSend);
-                    } catch (SmackException.NotConnectedException e) {
-                        e.printStackTrace();
-                    }
-
-
-                    //clear the chat window
-                    et=findViewById(R.id.Preacher_Message);
-                    et.setText("");
-                    et=findViewById(R.id.preacher_message_subject);
-                    et.setText("");
-                }
-
-
-
-
-
-
-
-
-
-
-            }//end of connection
-
-
-            return null;
-        }//end of do in background
-
-
-
-
-
-
-    }//end of inner class
-
-
-
-
-
-
-}//end of class
-
-
+}//end of outer class

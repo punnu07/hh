@@ -7,7 +7,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -15,6 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Hh">
+        <activity android:name=".RegistrationSuccess"></activity>
+        <activity android:name=".PreacherLandingPage" />
         <activity android:name=".preacher" />
         <activity android:name=".profile" />
         <activity android:name=".register" />

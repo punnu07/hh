@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if(tB.isChecked()){
                     //preacher case
-                    Intent intent = new Intent(context, preacher.class);
+                    Intent intent = new Intent(context, PreacherLandingPage.class);
                     String uname;
                     String pword;
                     EditText et=findViewById(R.id.login_username);

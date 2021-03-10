@@ -84,12 +84,10 @@ public class register extends AppCompatActivity {
 
                 //if account is created go to profile of the client
 
+
+                    Intent intent = new Intent(context, RegistrationSuccess.class);
+
                 /*
-                if(IsAccountCreated)
-                {
-                    Intent intent = new Intent(context, profile.class);
-
-
                     String username;
                     String password;
                     EditText et=findViewById(R.id.register_username);
@@ -100,10 +98,11 @@ public class register extends AppCompatActivity {
 
                     intent.putExtra(EXTRA_PWD, password);
                     intent.putExtra(EXTRA_NAME, username);
+                    */
                     startActivity(intent);
-                }
 
-                 */
+
+
 
             }
         });
@@ -268,9 +267,7 @@ public class register extends AppCompatActivity {
 
 
                 //create an xml message manually
-                InitialMessageToPreacher="<message><name>"+uname+"</name></message>";
-
-
+                InitialMessageToPreacher="<message><type>one</type><name>"+uname+"</name></message>";
 
                 //send the message to the preacher
                 String toPerson = "rony@localhost";

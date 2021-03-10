@@ -2,6 +2,7 @@ package com.example.hh;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -34,6 +35,7 @@ import java.io.IOException;
 
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.concurrent.ExecutionException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -71,13 +73,24 @@ public class profile extends AppCompatActivity {
         pword=getIntent().getStringExtra(MainActivity.EXTRA_PWD);
 
 
-        TextView tv=findViewById(R.id.incomingmessage);
-        DatabaseAdaptor db = new DatabaseAdaptor(this);
-
-        tv.setText(db.getCurrentMessage());
 
         //listening to the server
-        new connecttoserver().execute();
+              new connecttoserver().execute();
+
+
+        /*
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+         */
+
+        TextView tv=findViewById(R.id.incomingmessage);
+        DatabaseAdaptor dba = new DatabaseAdaptor(this);
+       tv.setText(dba.getCurrentMessage());
+
+
 
 
 
@@ -131,6 +144,12 @@ public class profile extends AppCompatActivity {
 
     private class sendmessage extends AsyncTask<Void, Void, Void> {
         String result;
+
+
+
+
+
+
         @Override
         protected Void doInBackground(Void... voids) {
 
@@ -229,9 +248,28 @@ public class profile extends AppCompatActivity {
 // listen to the server and  display any messages
     private class connecttoserver extends AsyncTask<Void, Void, Void> {
         String result;
-        @Override
-        protected Void doInBackground(Void... voids) {
 
+
+        final ProgressDialog dialog = new ProgressDialog(context);
+
+
+
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog.setMessage("Fetching...");
+            dialog.show();
+        }
+
+
+
+    protected void onPostExecute(Void result) {
+        super.onPostExecute(result);
+        if (dialog.isShowing()) {
+            dialog.dismiss();
+        }
+    }
+
+    protected Void doInBackground(Void... voids) {
 
 
             String userName=uname;
@@ -294,6 +332,12 @@ public class profile extends AppCompatActivity {
                                                   {
                                                      StringHandler sh=new StringHandler();
                                                      sh.set(message.getBody());
+
+                                                      TextView tv=findViewById(R.id.incomingmessage);
+                                                      tv.setText(message.getBody());
+
+
+
                                                   }
 
                                               }
@@ -324,6 +368,10 @@ public class profile extends AppCompatActivity {
 
 
 
+
+
+
+
     int CheckforXML(String ms)
     {
         try {
@@ -343,7 +391,6 @@ public class profile extends AppCompatActivity {
 
     private class StringHandler  {
 
-
         String  message;
         public void set(String ms)
         {
@@ -351,7 +398,6 @@ public class profile extends AppCompatActivity {
             DatabaseAdaptor db = new DatabaseAdaptor(context);
             db.truncatetable();
             db.addMessage(message,"");
-
         }
         public String get()
         {
