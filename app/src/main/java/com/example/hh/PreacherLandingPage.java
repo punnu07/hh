@@ -72,9 +72,12 @@ public class PreacherLandingPage extends AppCompatActivity {
         new listenForInitiationMessage().execute();
 
 
+
+        //handler for post message button
         Button post_button= findViewById(R.id.PreacherLandingPagePostButton);
         post_button.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
+
 
 
                     Intent intent = new Intent(context, preacher.class);
@@ -92,6 +95,36 @@ public class PreacherLandingPage extends AppCompatActivity {
 
 
 
+
+        Button pq_button= findViewById(R.id.PreacherLandingPagePrayerRequestsButton);
+        pq_button.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+
+
+                if(connection.isConnected()) {
+                    connection.disconnect();
+                }
+
+                    Intent intent = new Intent(context, PreacherProcessPrayerRequests.class);
+
+                intent.putExtra(EXTRA_PWD, pword);
+                intent.putExtra(EXTRA_NAME, uname);
+
+                startActivity(intent);
+
+
+
+
+            }//end of click
+        });
+
+
+
+
+
+
+
+        //handler for logout button
         Button preacherlandingpagelogout= findViewById(R.id.PreacherLandingPageLogoutButton);
         preacherlandingpagelogout.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
@@ -209,12 +242,13 @@ public class PreacherLandingPage extends AppCompatActivity {
                                                     }
 
                                                     //check if the type==1
-                                                    String type=doc.getElementsByTagName("type").item(0).getTextContent();
+                                                        String type=doc.getElementsByTagName("type").item(0).getTextContent();
                                                         String newusername = doc.getElementsByTagName("name").item(0).getTextContent();
                                                         String jid = newusername + "@localhost";
 
-                                                        Toast.makeText(getApplicationContext(), newusername, Toast.LENGTH_LONG);
-                                                    if(type.equals("one")) {
+
+                                                    if(type.equals("one"))
+                                                    {
                                                         Roster roster = Roster.getInstanceFor(connection);
                                                         roster.setSubscriptionMode(Roster.SubscriptionMode.accept_all);
                                                         try {
@@ -230,7 +264,22 @@ public class PreacherLandingPage extends AppCompatActivity {
                                                         }
                                                     }//end of type =1
 
-                                                }//end of valid xml
+                                                    //prayer requests
+                                                    if(type.equals("two")) {
+                                                        //put the requests in a db
+
+                                                        String m_time=doc.getElementsByTagName("time").item(0).getTextContent();
+                                                        String m_name = doc.getElementsByTagName("name").item(0).getTextContent();
+                                                        String m_matter=doc.getElementsByTagName("prayer").item(0).getTextContent();
+                                                        InsertPrayerRequestsIntoDB ip=new InsertPrayerRequestsIntoDB();
+                                                        ip.insertrequest(m_name, m_time, m_matter);
+
+                                                    }
+
+
+
+
+                                                    }//end of valid xml
 
 
                                             }//end of run
@@ -272,19 +321,31 @@ public class PreacherLandingPage extends AppCompatActivity {
 
 
 
-        private Document convertStringToDocument(String xmlStr) {
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder;
-            try
+
+
+
+
+
+        private class InsertPrayerRequestsIntoDB  {
+
+            String  name;
+            String time;
+            String prayerrequestmatter;
+
+            public void insertrequest(String n, String t, String p)
             {
-                builder = factory.newDocumentBuilder();
-                Document doc = builder.parse( new InputSource( new StringReader( xmlStr ) ) );
-                return doc;
-            } catch (Exception e) {
-                e.printStackTrace();
+                name=n;
+                time=t;
+                prayerrequestmatter=p;
+
+                DatabaseAdaptorPrayerRequest dbp = new DatabaseAdaptorPrayerRequest(context);
+                Log.d("DB created", "done");
+                dbp.addPrayerRequest(name, time,prayerrequestmatter);
+
             }
-            return null;
+
         }
+
 
 
 

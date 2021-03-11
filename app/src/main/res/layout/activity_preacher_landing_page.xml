@@ -9,7 +9,7 @@
     <Button
         android:id="@+id/PreacherLandingPagePostButton"
         android:layout_width="200dp"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:layout_marginTop="188dp"
         android:backgroundTint="#6EA470"
         android:text="Post Message"
@@ -20,25 +20,29 @@
     <Button
         android:id="@+id/PreacherLandingPagePrayerRequestsButton"
         android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="20dp"
         android:backgroundTint="#6EA470"
         android:text="View Prayer Requests"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/PreacherLandingPagePostButton"
-        app:layout_constraintVertical_bias="0.015" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/PreacherLandingPageLogoutButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="292dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:backgroundTint="#6EA470"
         android:text="Logout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/PreacherLandingPagePrayerRequestsButton" />
+        app:layout_constraintTop_toBottomOf="@+id/PreacherLandingPagePrayerRequestsButton"
+        app:layout_constraintVertical_bias="0.957" />
 </androidx.constraintlayout.widget.ConstraintLayout>

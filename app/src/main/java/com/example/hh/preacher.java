@@ -72,7 +72,7 @@ public class preacher extends AppCompatActivity {
 
 
         //listen to server for any xmls
-        new preacher.listentoserver().execute();
+       // new preacher.listentoserver().execute();
 
 
 
@@ -314,6 +314,42 @@ public class preacher extends AppCompatActivity {
             String userName=uname;
             String password=pword;
 
+
+
+
+            XMPPTCPConnectionConfiguration config = XMPPTCPConnectionConfiguration.builder()
+                    .setUsernameAndPassword(userName, password)
+                    .setServiceName("localhost")
+                    .setHost("3.139.90.132")
+                    .setPort(5222)
+                    .setConnectTimeout(25000)
+                    .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled) // Do not disable TLS except for test purposes!
+                    .setDebuggerEnabled(true)
+                    .setSendPresence(true)
+                    .build();
+
+
+
+            connection = new XMPPTCPConnection(config);
+            ((XMPPTCPConnection) connection).setUseStreamManagement(true);           //changed from false to true
+            ((XMPPTCPConnection) connection).setUseStreamManagementResumption(true); //added
+            try {
+                connection.connect().login();
+            } catch (XMPPException e) {
+                e.printStackTrace();
+            } catch (SmackException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+
+
+
+
+
+
             EditText et, ett;
 
 
@@ -326,6 +362,14 @@ public class preacher extends AppCompatActivity {
 
             //String MessageToSend= "<message><preachermessagesubject>" +preachermessagesubject+ "</preachermessagesubject><preachermessage>" +preachermessage+ "</preachermessage></message>";
             String MessageToSend = preachermessagesubject+"\n\n"+preachermessage;
+
+
+
+
+
+
+
+
 
 
 

@@ -8,8 +8,8 @@
 
     <TextView
         android:id="@+id/incomingmessage"
-        android:layout_width="280dp"
-        android:layout_height="93dp"
+        android:layout_width="326dp"
+        android:layout_height="311dp"
         android:layout_marginStart="40dp"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -17,7 +17,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.15" />
+        app:layout_constraintVertical_bias="0.206" />
 
     <TextView
         android:id="@+id/incoming_heading"
@@ -34,57 +34,50 @@
 
     <TextView
         android:id="@+id/Send"
-        android:layout_width="78dp"
-        android:layout_height="15dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="48dp"
-        android:text="Send Message"
+        android:layout_width="165dp"
+        android:layout_height="29dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="5dp"
+        android:text="Prayer Request"
         android:textColor="#A81717"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/Messagetosend"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.191"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/incomingmessage" />
+        app:layout_constraintTop_toBottomOf="@+id/incomingmessage"
+        app:layout_constraintVertical_bias="0.0" />
 
     <EditText
         android:id="@+id/Messagetosend"
-        android:layout_width="189dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="32dp"
+        android:layout_width="219dp"
+        android:layout_height="127dp"
+        android:layout_marginBottom="96dp"
         android:ems="10"
         android:gravity="start|top"
+        android:hint="Type your prayer request here"
         android:inputType="textMultiLine"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.218"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toperson"
-        app:layout_constraintVertical_bias="0.006" />
-
-    <EditText
-        android:id="@+id/toperson"
-        android:layout_width="91dp"
-        android:layout_height="56dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="84dp"
-        android:ems="10"
-        android:hint="To"
-        android:inputType="textPersonName"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/incomingmessage" />
+        app:layout_constraintTop_toBottomOf="@+id/incomingmessage"
+        app:layout_constraintVertical_bias="0.947" />
 
     <Button
         android:id="@+id/send_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="180dp"
-        android:layout_marginEnd="10dp"
         android:layout_marginBottom="100dp"
-        android:text="Send"
+        android:backgroundTint="#6EA470"
+        android:text="submit"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.047"
+        app:layout_constraintHorizontal_bias="0.204"
         app:layout_constraintStart_toEndOf="@+id/Messagetosend"
         app:layout_constraintTop_toBottomOf="@+id/incomingmessage"
-        app:layout_constraintVertical_bias="0.072" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/logoutbutton"
@@ -92,6 +85,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="94dp"
         android:layout_marginBottom="12dp"
+        android:backgroundTint="#6EA470"
         android:text="Logout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
@@ -35,6 +36,8 @@ import java.io.IOException;
 
 import java.io.StringReader;
 import java.io.StringWriter;
+
+import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -68,6 +71,16 @@ public class profile extends AppCompatActivity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+
+        TextView textView = (TextView) findViewById(R.id.Send);
+        textView.setPaintFlags(textView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
+
+        textView = (TextView) findViewById(R.id.incoming_heading);
+        textView.setPaintFlags(textView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
+
 
         uname=getIntent().getStringExtra(MainActivity.EXTRA_NAME);
         pword=getIntent().getStringExtra(MainActivity.EXTRA_PWD);
@@ -141,28 +154,31 @@ public class profile extends AppCompatActivity {
 
 
 
-
+// this will send a prayer request to the preacher
     private class sendmessage extends AsyncTask<Void, Void, Void> {
         String result;
-
-
-
-
 
 
         @Override
         protected Void doInBackground(Void... voids) {
 
 
+            EditText et;
 
-            String toPerson;
-            EditText et=(EditText)findViewById(R.id.toperson);
-            toPerson=et.getText().toString()+"@localhost";
+            String toPerson="rony@localhost";
+            //EditText et=(EditText)findViewById(R.id.toperson);
+            //toPerson=et.getText().toString()+"@localhost";
 
 
 
             et=(EditText)findViewById(R.id.Messagetosend);
-            String MessageToSend=et.getText().toString();
+            String PrayerSubject=et.getText().toString();
+            String currentDateTimeString = java.text.DateFormat.getDateTimeInstance().format(new Date());
+
+
+            String MessageToSend="<message><type>two</type><name>"+uname+"</name><time>"+currentDateTimeString+"</time><prayer>"+PrayerSubject+"</prayer></message>";
+
+
 
 
             /*
@@ -335,9 +351,6 @@ public class profile extends AppCompatActivity {
 
                                                       TextView tv=findViewById(R.id.incomingmessage);
                                                       tv.setText(message.getBody());
-
-
-
                                                   }
 
                                               }
