@@ -57,6 +57,7 @@ public class DatabaseAdaptorPrayerRequest extends SQLiteOpenHelper {
 
         // insert row in students table
         long insert = db.insert(TABLE_NAME, null, values);
+        db.close();
         return insert;
     }
 
@@ -71,6 +72,7 @@ public class DatabaseAdaptorPrayerRequest extends SQLiteOpenHelper {
         String truncate_command2="vacuum;";
         Log.d("truncate2", truncate_command2);
         db.execSQL(truncate_command2);
+        db.close();
 
     }
 
@@ -93,6 +95,7 @@ public class DatabaseAdaptorPrayerRequest extends SQLiteOpenHelper {
 
             Log.d("array", constantsArrayList.toString());
         }
+        db.close();
         return constantsArrayList;
     }
 
@@ -115,6 +118,7 @@ public class DatabaseAdaptorPrayerRequest extends SQLiteOpenHelper {
 
             Log.d("array", constantsArrayList.toString());
         }
+        db.close();
         return constantsArrayList;
     }
 
@@ -137,6 +141,7 @@ public class DatabaseAdaptorPrayerRequest extends SQLiteOpenHelper {
 
             Log.d("array", constantsArrayList.toString());
         }
+        db.close();
         return constantsArrayList;
     }
 

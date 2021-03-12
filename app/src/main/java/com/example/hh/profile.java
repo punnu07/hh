@@ -158,8 +158,27 @@ public class profile extends AppCompatActivity {
     private class sendmessage extends AsyncTask<Void, Void, Void> {
         String result;
 
+    final ProgressDialog dialog = new ProgressDialog(context);
 
-        @Override
+
+
+    protected void onPreExecute() {
+        super.onPreExecute();
+        dialog.setMessage(" ");
+        dialog.show();
+    }
+
+
+    protected void onPostExecute(Void result) {
+        super.onPostExecute(result);
+        if (dialog.isShowing()) {
+            dialog.dismiss();
+        }
+    }
+
+
+
+    @Override
         protected Void doInBackground(Void... voids) {
 
 

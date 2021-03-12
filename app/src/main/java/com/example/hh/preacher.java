@@ -2,6 +2,7 @@ package com.example.hh;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -306,6 +307,30 @@ public class preacher extends AppCompatActivity {
     //new class for sending  message to all the clients
     private class sendmessagetoallsubscribers extends AsyncTask<Void, Void, Void> {
         String result;
+
+
+
+        final ProgressDialog dialog = new ProgressDialog(context);
+
+
+
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog.setMessage("Sending...");
+            dialog.show();
+        }
+
+
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
+        }
+
+
+
+
         @Override
         protected Void doInBackground(Void... voids) {
 

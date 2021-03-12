@@ -49,6 +49,8 @@ public class PreacherProcessPrayerRequests extends AppCompatActivity {
         ArrayList<String> RequestNames=dbp.getAllNameRequests();
         ArrayList<String> RequestPrayerMatters=dbp.getAllPrayerMatterRequests();
 
+
+
         //TextView tv=findViewById(R.id.PrayerRequestsView);
 
         //tv.setText(prayerrequests.);
@@ -76,7 +78,7 @@ public class PreacherProcessPrayerRequests extends AppCompatActivity {
         for (int i=0; i<RequestNames.size();i++){
             DisplayStringArray.append("\t");
             DisplayStringArray.append(RequestNames.get(i));
-            DisplayStringArray.append("  ");
+            DisplayStringArray.append(" : ");
             DisplayStringArray.append(RequestPrayerMatters.get(i));
             DisplayStringArray.append("\n");
         }
