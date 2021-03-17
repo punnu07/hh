@@ -46,6 +46,9 @@ import javax.xml.parsers.ParserConfigurationException;
 
 public class preacher extends AppCompatActivity {
 
+    public static final String EXTRA_NAME="a" ;
+    public static final String EXTRA_PWD ="b";
+
 
     final Context context=this;
     public String uname="";
@@ -59,8 +62,8 @@ public class preacher extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preacher);
 
-        uname=getIntent().getStringExtra(PreacherLandingPage.EXTRA_NAME);
-        pword=getIntent().getStringExtra(PreacherLandingPage.EXTRA_PWD);
+        uname=getIntent().getStringExtra(preacher.EXTRA_NAME);
+        pword=getIntent().getStringExtra(preacher.EXTRA_PWD);
 
 
         //check whether preacher logged correctly

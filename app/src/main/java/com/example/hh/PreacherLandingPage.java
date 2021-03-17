@@ -56,8 +56,8 @@ public class PreacherLandingPage extends AppCompatActivity {
         setContentView(R.layout.activity_preacher_landing_page);
 
 
-        uname=getIntent().getStringExtra(MainActivity.EXTRA_NAME);
-        pword=getIntent().getStringExtra(MainActivity.EXTRA_PWD);
+        uname=getIntent().getStringExtra(PreacherLandingPage.EXTRA_NAME);
+        pword=getIntent().getStringExtra(PreacherLandingPage.EXTRA_PWD);
 
 
         //check whether preacher logged correctly

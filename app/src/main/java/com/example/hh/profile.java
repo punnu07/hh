@@ -58,6 +58,10 @@ public class profile extends AppCompatActivity {
     final Context context=this;
 
 
+
+    public static final String EXTRA_NAME="a" ;
+    public static final String EXTRA_PWD ="b";
+
     public String uname;
     public String pword;
 
@@ -82,8 +86,8 @@ public class profile extends AppCompatActivity {
 
 
 
-        uname=getIntent().getStringExtra(MainActivity.EXTRA_NAME);
-        pword=getIntent().getStringExtra(MainActivity.EXTRA_PWD);
+        uname=getIntent().getStringExtra(profile.EXTRA_NAME);
+        pword=getIntent().getStringExtra(profile.EXTRA_PWD);
 
 
 

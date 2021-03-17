@@ -39,8 +39,8 @@ public class PreacherProcessPrayerRequests extends AppCompatActivity {
         setContentView(R.layout.activity_preacher_process_prayer_requests);
 
 
-        uname=getIntent().getStringExtra(MainActivity.EXTRA_NAME);
-        pword=getIntent().getStringExtra(MainActivity.EXTRA_PWD);
+        uname=getIntent().getStringExtra(PreacherProcessPrayerRequests.EXTRA_NAME);
+        pword=getIntent().getStringExtra(PreacherProcessPrayerRequests.EXTRA_PWD);
 
 
         DatabaseAdaptorPrayerRequest dbp = new DatabaseAdaptorPrayerRequest(context);
