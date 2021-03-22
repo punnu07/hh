@@ -131,10 +131,13 @@ public class PreacherLandingPage extends AppCompatActivity {
             public void onClick(View v){
 
 
+
                 if(connection.isConnected())
                 {
                     connection.disconnect();
                 }
+
+
                     uname="";
                     pword="";
                     Intent intent = new Intent(context, MainActivity.class);
