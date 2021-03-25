@@ -1,16 +1,21 @@
 package com.example.hh;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.hardware.ConsumerIrManager;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
@@ -33,6 +38,12 @@ public class PreacherProcessPrayerRequests extends AppCompatActivity {
 
 
 
+    CardView cardview,cardview2;
+    LinearLayout.LayoutParams layoutparams;
+    TextView textview,textview2;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +52,9 @@ public class PreacherProcessPrayerRequests extends AppCompatActivity {
 
         uname=getIntent().getStringExtra(PreacherProcessPrayerRequests.EXTRA_NAME);
         pword=getIntent().getStringExtra(PreacherProcessPrayerRequests.EXTRA_PWD);
+
+        layoutparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT );
+
 
 
         DatabaseAdaptorPrayerRequest dbp = new DatabaseAdaptorPrayerRequest(context);
@@ -51,11 +65,9 @@ public class PreacherProcessPrayerRequests extends AppCompatActivity {
 
 
 
-        //TextView tv=findViewById(R.id.PrayerRequestsView);
-
-        //tv.setText(prayerrequests.);
 
 
+        String displayText="";
 
 
         Button RequestsViewClear = new Button(this);
@@ -74,13 +86,60 @@ public class PreacherProcessPrayerRequests extends AppCompatActivity {
         DisplayStringArray.setTextSize(18);
         DisplayStringArray.append("\n\nPrayer Requests\n\n");
         DisplayStringArray.setTextSize(14);
-        LinearLayoutView.addView(DisplayStringArray);
+
+
+
+        //LinearLayoutView.addView(DisplayStringArray);
+
+        CardView []cv=new CardView[RequestNames.size()];
+
+
         for (int i=0; i<RequestNames.size();i++){
+
+            /*
             DisplayStringArray.append("\t");
             DisplayStringArray.append(RequestNames.get(i));
             DisplayStringArray.append(" : ");
             DisplayStringArray.append(RequestPrayerMatters.get(i));
             DisplayStringArray.append("\n");
+            */
+
+            displayText="\t"+RequestNames.get(i)+" : "+RequestPrayerMatters.get(i);
+
+
+            cv[i] = new CardView(context);
+
+            //ViewGroup.MarginLayoutParams cvmp=(ViewGroup.MarginLayoutParams)cv[i].getLayoutParams();
+            //cvmp.setMargins(0,30,0,30);
+           // cv[i].requestLayout();
+
+            layoutparams.setMargins(5,5,5,5);
+            cv[i].setLayoutParams(layoutparams);
+            cv[i].setRadius(5);
+            cv[i].setPadding(5, 5, 5, 5);
+            cv[i].setCardBackgroundColor(0xFDFDFDFF);
+            cv[i].setMaxCardElevation(10);
+
+
+
+
+
+
+            textview = new TextView(context);
+            textview.setLayoutParams(layoutparams);
+            textview.setText(displayText);
+            textview.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+            textview.setTextColor(Color.BLACK);
+            textview.setPadding(55,55,55,55);
+            textview.setGravity(Gravity.CENTER);
+
+
+            cv[i].addView(textview);
+
+            LinearLayoutView.addView(cv[i]);
+
+
+
         }
 
         DisplayStringArray.append("\n\n");
@@ -90,10 +149,9 @@ public class PreacherProcessPrayerRequests extends AppCompatActivity {
         RequestsViewClear.setBackgroundColor(0xFF6EA470);
         RequestsViewClear.setTextColor(Color.WHITE);
         RequestsViewClear.setWidth(280);
+        RequestsViewClear.setPadding(25,25,25,25);
 
         LinearLayoutView.addView(RequestsViewClear);
-
-
 
         //LinearLayout.LayoutParams layoutParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
@@ -123,6 +181,26 @@ public class PreacherProcessPrayerRequests extends AppCompatActivity {
 
             }//end of click
         });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
