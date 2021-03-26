@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TableRow;
 import android.widget.TextView;
 
@@ -76,12 +77,9 @@ public class PreacherProcessPrayerRequests extends AppCompatActivity {
         // RequestsViewClear.setId(Integer.parseInt("RequestsViewClearButton"));
 
         LinearLayout LinearLayoutView = new LinearLayout(this);
-
         LinearLayoutView.setOrientation(LinearLayout.VERTICAL);
 
-
         TextView DisplayStringArray = new TextView(this);
-
         DisplayStringArray.setGravity(Gravity.CENTER);
         DisplayStringArray.setTextSize(18);
         DisplayStringArray.append("\n\nPrayer Requests\n\n");
@@ -93,25 +91,15 @@ public class PreacherProcessPrayerRequests extends AppCompatActivity {
 
         CardView []cv=new CardView[RequestNames.size()];
 
+        ScrollView sv=new ScrollView(context);
 
         for (int i=0; i<RequestNames.size();i++){
 
-            /*
-            DisplayStringArray.append("\t");
-            DisplayStringArray.append(RequestNames.get(i));
-            DisplayStringArray.append(" : ");
-            DisplayStringArray.append(RequestPrayerMatters.get(i));
-            DisplayStringArray.append("\n");
-            */
 
             displayText="\t"+RequestNames.get(i)+" : "+RequestPrayerMatters.get(i);
 
 
             cv[i] = new CardView(context);
-
-            //ViewGroup.MarginLayoutParams cvmp=(ViewGroup.MarginLayoutParams)cv[i].getLayoutParams();
-            //cvmp.setMargins(0,30,0,30);
-           // cv[i].requestLayout();
 
             layoutparams.setMargins(5,5,5,5);
             cv[i].setLayoutParams(layoutparams);
@@ -119,10 +107,6 @@ public class PreacherProcessPrayerRequests extends AppCompatActivity {
             cv[i].setPadding(5, 5, 5, 5);
             cv[i].setCardBackgroundColor(0xFDFDFDFF);
             cv[i].setMaxCardElevation(10);
-
-
-
-
 
 
             textview = new TextView(context);
@@ -133,35 +117,41 @@ public class PreacherProcessPrayerRequests extends AppCompatActivity {
             textview.setPadding(55,55,55,55);
             textview.setGravity(Gravity.CENTER);
 
-
             cv[i].addView(textview);
 
             LinearLayoutView.addView(cv[i]);
 
-
-
         }
+
+
+        sv.addView(LinearLayoutView);
 
         DisplayStringArray.append("\n\n");
 
-        //add the button to the lienar view
 
+
+
+        //add the button to the lienar view
         RequestsViewClear.setBackgroundColor(0xFF6EA470);
         RequestsViewClear.setTextColor(Color.WHITE);
         RequestsViewClear.setWidth(280);
         RequestsViewClear.setPadding(25,25,25,25);
 
-        LinearLayoutView.addView(RequestsViewClear);
-
-        //LinearLayout.LayoutParams layoutParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-
         LinearLayout.LayoutParams ll = (LinearLayout.LayoutParams)RequestsViewClear.getLayoutParams();
         ll.gravity = Gravity.CENTER_HORIZONTAL|Gravity.BOTTOM;
+        ll.setMargins(0,55,0,0);
+
+
         RequestsViewClear.setLayoutParams(ll);
 
+        LinearLayoutView.addView(RequestsViewClear);
 
-        setContentView(LinearLayoutView);
+
+//end of button
+
+        //ScrollView sv=new ScrollView(this);
+        //sv.addView(LinearLayoutView);
+        setContentView(sv);
 
 
 

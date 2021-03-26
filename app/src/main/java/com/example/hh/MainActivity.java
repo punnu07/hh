@@ -99,7 +99,9 @@ public class MainActivity extends AppCompatActivity {
                 else
                 {
 
-                    Intent intent = new Intent(context, profile.class);
+                   // Intent intent = new Intent(context, profile.class);
+
+                    Intent intent = new Intent(context, Profile2.class);
                     String uname;
                     String pword;
                     EditText et=findViewById(R.id.login_username);

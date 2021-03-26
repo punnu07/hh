@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Hh">
-        <activity android:name=".PreacherProcessPrayerRequests"></activity>
+        <activity android:name=".Profile2"></activity>
+        <activity android:name=".PreacherProcessPrayerRequests" />
         <activity android:name=".RegistrationSuccess" />
         <activity android:name=".PreacherLandingPage" />
         <activity android:name=".preacher" />
