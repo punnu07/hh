@@ -75,10 +75,11 @@ public class preacher extends AppCompatActivity {
         }
 
 
-        //listen to server for any xmls
+
        // new preacher.listentoserver().execute();
 
-
+        //listen to server for any xmls
+        new listenForInitiationMessage().execute();
 
         //handler for post button
         Button post_button= findViewById(R.id.Post);
@@ -93,6 +94,7 @@ public class preacher extends AppCompatActivity {
         });
 
 
+        /*
         //handler for logout
         Button preacherlogout= findViewById(R.id.preacherlogoutbutton);
         preacherlogout.setOnClickListener(new View.OnClickListener(){
@@ -114,7 +116,7 @@ public class preacher extends AppCompatActivity {
             }
         });
 
-
+        */
 
 
     }//end of oncreate function
@@ -124,171 +126,23 @@ public class preacher extends AppCompatActivity {
 
 
 
+    protected void onDestroy(){
+        super.onDestroy();
 
-
-    // listen to the server
-    //this handles  initiation messages from the clients
-    private class listentoserver extends AsyncTask<Void, Void, Void> {
-        String result;
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-
-
-            String userName=uname;
-            String password=pword;
-
-
-
-
-            XMPPTCPConnectionConfiguration config = XMPPTCPConnectionConfiguration.builder()
-                    .setUsernameAndPassword(userName, password)
-                    .setServiceName("localhost")
-                    .setHost("3.139.90.132")
-                    .setPort(5222)
-                    .setConnectTimeout(25000)
-                    .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled) // Do not disable TLS except for test purposes!
-                    .setDebuggerEnabled(true)
-                    .setSendPresence(true)
-                    .build();
-
-
-
-            connection = new XMPPTCPConnection(config);
-            ((XMPPTCPConnection) connection).setUseStreamManagement(true);           //changed from false to true
-            ((XMPPTCPConnection) connection).setUseStreamManagementResumption(true); //added
-            try {
-                connection.connect().login();
-            } catch (XMPPException e) {
-                e.printStackTrace();
-            } catch (SmackException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-
-
-            if(connection.isAuthenticated())
-            {
-                Log.w("app", "Auth done");
-                ChatManager chatManager = ChatManager.getInstanceFor(connection);
-                chatManager.addChatListener(
-                        new ChatManagerListener() {
-                            @Override
-                            public void chatCreated(Chat chat, boolean createdLocally)
-                            {
-                                chat.addMessageListener(new ChatMessageListener()
-                                {
-                                    @Override
-                                    public void processMessage(Chat chat, Message message) {
-
-                                        runOnUiThread(new Runnable(){
-                                            public void run()
-                                            {
-                                                TextView tv=findViewById(R.id.incomingmessage);
-
-                                                //check whether incoming message is an xml type format
-                                                int valid_xml=CheckforXML(message.getBody());
-                                                if(valid_xml==1)
-                                                {
-
-                                                    //send a roster request to the new client
-                                                    String xmlstring=message.getBody();
-                                                    DocumentBuilder builder = null;
-                                                    try {
-                                                        builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-                                                    } catch (ParserConfigurationException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                    InputSource src = new InputSource();
-                                                    src.setCharacterStream(new StringReader(xmlstring));
-                                                    Document doc = null;
-                                                    try {
-                                                        doc = builder.parse(src);
-                                                    } catch (IOException e) {
-                                                        e.printStackTrace();
-                                                    } catch (SAXException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                    String newusername = doc.getElementsByTagName("name").item(0).getTextContent();
-                                                    String jid=newusername+"@localhost";
-                                                    Toast.makeText(getApplicationContext(),  newusername,  Toast.LENGTH_LONG);
-
-                                                  Roster roster = Roster.getInstanceFor(connection);
-                                                  roster.setSubscriptionMode(Roster.SubscriptionMode.accept_all);
-                                                    try {
-                                                        roster.createEntry(newusername, jid, null);
-                                                    } catch (SmackException.NotLoggedInException e) {
-                                                        e.printStackTrace();
-                                                    } catch (SmackException.NoResponseException e) {
-                                                        e.printStackTrace();
-                                                    } catch (XMPPException.XMPPErrorException e) {
-                                                        e.printStackTrace();
-                                                    } catch (SmackException.NotConnectedException e) {
-                                                        e.printStackTrace();
-                                                    }
-
-                                                }//end of valid xml
-
-
-                                            }//end of run
-
-                                        });
-
-
-
-                                    }
-                                });
-
-                                Log.w("app", chat.toString());
-                            }// end of chat created
-                        });
-
-
-
-
-            }//end of received message
-
-
-            return null;
-        }//end of do in background
-
-
-
-
-
-        int CheckforXML(String ms)
+        if(connection.isConnected())
         {
-            try {
-                DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(ms)));
-                return 1;
-            } catch (Exception e) {
-                return 0;
-            }
+            connection.disconnect();
         }
+        finish();
+    }//end of onDestroy
 
 
 
 
-        private Document convertStringToDocument(String xmlStr) {
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder;
-            try
-            {
-                builder = factory.newDocumentBuilder();
-                Document doc = builder.parse( new InputSource( new StringReader( xmlStr ) ) );
-                return doc;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
 
 
 
 
-    }//end of inner class
 
 
 
@@ -343,6 +197,7 @@ public class preacher extends AppCompatActivity {
             String password=pword;
 
 
+            /*
 
 
             XMPPTCPConnectionConfiguration config = XMPPTCPConnectionConfiguration.builder()
@@ -372,7 +227,7 @@ public class preacher extends AppCompatActivity {
             }
 
 
-
+            */
 
 
 
@@ -464,11 +319,238 @@ public class preacher extends AppCompatActivity {
         }//end of do in background
 
 
+    }//end of inner class
+
+
+
+
+
+
+
+    // listen to the server
+    //this handles  initiation messages from the clients
+    private class listenForInitiationMessage extends AsyncTask<Void, Void, Void> {
+        String result;
+
+
+        final ProgressDialog dialog = new ProgressDialog(context);
+
+
+
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog.setMessage(" ");
+            dialog.show();
+        }
+
+
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
+        }
+
+
+
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+
+
+            String userName=uname;
+            String password=pword;
+
+
+
+
+            XMPPTCPConnectionConfiguration config = XMPPTCPConnectionConfiguration.builder()
+                    .setUsernameAndPassword(userName, password)
+                    .setServiceName("localhost")
+                    .setHost("3.139.90.132")
+                    .setPort(5222)
+                    .setConnectTimeout(25000)
+                    .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled) // Do not disable TLS except for test purposes!
+                    .setDebuggerEnabled(true)
+                    .setSendPresence(true)
+                    .build();
+
+
+
+            connection = new XMPPTCPConnection(config);
+            ((XMPPTCPConnection) connection).setUseStreamManagement(true);           //changed from false to true
+            ((XMPPTCPConnection) connection).setUseStreamManagementResumption(true); //added
+            try {
+                connection.connect().login();
+            } catch (XMPPException e) {
+                e.printStackTrace();
+            } catch (SmackException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+
+            if(connection.isAuthenticated())
+            {
+                Log.w("app", "Auth done");
+                ChatManager chatManager = ChatManager.getInstanceFor(connection);
+                chatManager.addChatListener(
+                        new ChatManagerListener() {
+                            @Override
+                            public void chatCreated(Chat chat, boolean createdLocally)
+                            {
+                                chat.addMessageListener(new ChatMessageListener()
+                                {
+                                    @Override
+                                    public void processMessage(Chat chat, Message message) {
+
+                                        runOnUiThread(new Runnable(){
+                                            public void run()
+                                            {
+
+
+                                                //check whether incoming message is an xml type format
+                                                int valid_xml=CheckforXML(message.getBody());
+                                                if(valid_xml==1)
+                                                {
+
+                                                    //send a roster request to the new client
+                                                    String xmlstring=message.getBody();
+                                                    DocumentBuilder builder = null;
+                                                    try {
+                                                        builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+                                                    } catch (ParserConfigurationException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                    InputSource src = new InputSource();
+                                                    src.setCharacterStream(new StringReader(xmlstring));
+                                                    Document doc = null;
+                                                    try {
+                                                        doc = builder.parse(src);
+                                                    } catch (IOException e) {
+                                                        e.printStackTrace();
+                                                    } catch (SAXException e) {
+                                                        e.printStackTrace();
+                                                    }
+
+                                                    //check if the type
+                                                    String type=doc.getElementsByTagName("type").item(0).getTextContent();
+                                                    String newusername = doc.getElementsByTagName("name").item(0).getTextContent();
+                                                    String jid = newusername + "@localhost";
+
+                                                    //initiation message
+                                                    if(type.equals("one"))
+                                                    {
+                                                        Roster roster = Roster.getInstanceFor(connection);
+                                                        roster.setSubscriptionMode(Roster.SubscriptionMode.accept_all);
+                                                        try {
+                                                            roster.createEntry(newusername, jid, null);
+                                                        } catch (SmackException.NotLoggedInException e) {
+                                                            e.printStackTrace();
+                                                        } catch (SmackException.NoResponseException e) {
+                                                            e.printStackTrace();
+                                                        } catch (XMPPException.XMPPErrorException e) {
+                                                            e.printStackTrace();
+                                                        } catch (SmackException.NotConnectedException e) {
+                                                            e.printStackTrace();
+                                                        }
+
+                                                        Log.d("User Initiaition", newusername);
+                                                    }//end of type =1
+
+                                                    //prayer requests
+                                                    if(type.equals("two")) {
+                                                        //put the requests in a db
+
+                                                        String m_time=doc.getElementsByTagName("time").item(0).getTextContent();
+                                                        String m_name = doc.getElementsByTagName("name").item(0).getTextContent();
+                                                        String m_matter=doc.getElementsByTagName("prayer").item(0).getTextContent();
+                                                        preacher.listenForInitiationMessage.InsertPrayerRequestsIntoDB ip=new preacher.listenForInitiationMessage.InsertPrayerRequestsIntoDB();
+                                                        ip.insertrequest(m_name, m_time, m_matter);
+                                                        Log.d("Prayer Request",m_matter);
+                                                    }
+
+
+
+
+                                                }//end of valid xml
+
+
+                                            }//end of run
+
+                                        });
+
+
+
+                                    }
+                                });
+
+                                Log.w("app", chat.toString());
+                            }// end of chat created
+                        });
+
+
+
+
+            }//end of received message
+
+
+            return null;
+        }//end of do in background
+
+
+
+
+
+        int CheckforXML(String ms)
+        {
+            try {
+                DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(ms)));
+                return 1;
+            } catch (Exception e) {
+                return 0;
+            }
+        }
+
+
+
+
+
+
+
+
+
+        private class InsertPrayerRequestsIntoDB  {
+
+            String  name;
+            String time;
+            String prayerrequestmatter;
+
+            public void insertrequest(String n, String t, String p)
+            {
+                name=n;
+                time=t;
+                prayerrequestmatter=p;
+
+                DatabaseAdaptorPrayerRequest dbp = new DatabaseAdaptorPrayerRequest(context);
+                Log.d("DB created", "done");
+                dbp.addPrayerRequest(name, time,prayerrequestmatter);
+
+            }
+
+        }
+
 
 
 
 
     }//end of inner class
+
+
+
 
 
 

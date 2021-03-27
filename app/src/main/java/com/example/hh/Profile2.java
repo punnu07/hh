@@ -248,7 +248,7 @@ public class Profile2 extends AppCompatActivity {
 
 
 
-
+        //get the incoming messages
         new connecttoserver().execute();
 
         SubmitPrayerRequest.setOnClickListener(new View.OnClickListener(){
@@ -278,12 +278,13 @@ public class Profile2 extends AppCompatActivity {
         if(connection.isConnected())
         {
             connection.disconnect();
-            uname="";
-            pword="";
-            Intent intent = new Intent(context, MainActivity.class);
-            startActivity(intent);
-
         }
+           uname="";
+           pword="";
+           Intent intent = new Intent(context, MainActivity.class);
+           startActivity(intent);
+
+
 
         finish();
     }//end of onDestroy
@@ -304,7 +305,7 @@ public class Profile2 extends AppCompatActivity {
 
         protected void onPreExecute() {
             super.onPreExecute();
-            dialog.setMessage(" ");
+            dialog.setMessage("Submitting...");
             dialog.show();
         }
 

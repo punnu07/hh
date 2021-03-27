@@ -96,7 +96,7 @@ public class PreacherLandingPage extends AppCompatActivity {
 
 
 
-
+        //prayer requests
         Button pq_button= findViewById(R.id.PreacherLandingPagePrayerRequestsButton);
         pq_button.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
@@ -118,6 +118,7 @@ public class PreacherLandingPage extends AppCompatActivity {
 
             }//end of click
         });
+
 
 
 
@@ -156,6 +157,27 @@ public class PreacherLandingPage extends AppCompatActivity {
     }//end of oncreate
 
 
+
+
+/*
+
+    protected void onDestroy(){
+        super.onDestroy();
+
+        if(connection.isConnected())
+        {
+            connection.disconnect();
+            uname="";
+            pword="";
+            Intent intent = new Intent(context, MainActivity.class);
+            startActivity(intent);
+        }
+
+        finish();
+    }
+
+
+*/
 
 
 
@@ -269,12 +291,12 @@ public class PreacherLandingPage extends AppCompatActivity {
                                                         e.printStackTrace();
                                                     }
 
-                                                    //check if the type==1
+                                                    //check if the type
                                                         String type=doc.getElementsByTagName("type").item(0).getTextContent();
                                                         String newusername = doc.getElementsByTagName("name").item(0).getTextContent();
                                                         String jid = newusername + "@localhost";
 
-
+                                                     //initiation message
                                                     if(type.equals("one"))
                                                     {
                                                         Roster roster = Roster.getInstanceFor(connection);
@@ -290,6 +312,8 @@ public class PreacherLandingPage extends AppCompatActivity {
                                                         } catch (SmackException.NotConnectedException e) {
                                                             e.printStackTrace();
                                                         }
+
+                                                        Log.d("User Initiaition", newusername);
                                                     }//end of type =1
 
                                                     //prayer requests
@@ -301,7 +325,7 @@ public class PreacherLandingPage extends AppCompatActivity {
                                                         String m_matter=doc.getElementsByTagName("prayer").item(0).getTextContent();
                                                         InsertPrayerRequestsIntoDB ip=new InsertPrayerRequestsIntoDB();
                                                         ip.insertrequest(m_name, m_time, m_matter);
-
+                                                        Log.d("Prayer Request",m_matter);
                                                     }
 
 
@@ -378,7 +402,7 @@ public class PreacherLandingPage extends AppCompatActivity {
 
 
 
-    }
+    }//end of inner class
 
 
 
