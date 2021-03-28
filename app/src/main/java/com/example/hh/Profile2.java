@@ -74,6 +74,7 @@ public class Profile2 extends AppCompatActivity {
 
 
 
+
     @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,6 +174,7 @@ public class Profile2 extends AppCompatActivity {
         //messaage to send
         rlayoutparams3.width=rlayoutparams2.width;
         rlayoutparams3.height=rlayoutparams2.height;
+        //rlayoutparams3.setMargins(20,10,0,10);
 
 
         MessageToSend = new EditText(context);
@@ -296,7 +298,8 @@ public class Profile2 extends AppCompatActivity {
 
 
     // this will send a prayer request to the preacher
-    private class sendmessage extends AsyncTask<Void, Void, Void> {
+    @SuppressLint("StaticFieldLeak")
+    private  class sendmessage extends AsyncTask<Void, Void, Void> {
         String result;
 
         final ProgressDialog dialog = new ProgressDialog(context);
@@ -390,8 +393,20 @@ public class Profile2 extends AppCompatActivity {
 
 
                 //clear the chat window
-                MessageToSend.setText("");
+
+
+
+                runOnUiThread(new Runnable(){
+                    public void run() {
+
+                        MessageToSend.setText("");
+
+                    }
+                    });
+
+
             }//send message end
+
 
 
 

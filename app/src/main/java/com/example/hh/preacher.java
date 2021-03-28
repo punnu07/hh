@@ -296,11 +296,19 @@ public class preacher extends AppCompatActivity {
                     }
 
 
-                    //clear the chat window
-                    et=findViewById(R.id.Preacher_Message);
-                    et.setText("");
-                    et=findViewById(R.id.preacher_message_subject);
-                    et.setText("");
+                    runOnUiThread(new Runnable(){
+                        public void run() {
+
+
+                            //clear the chat window
+                            EditText et = findViewById(R.id.Preacher_Message);
+                            et.setText("");
+                            et = findViewById(R.id.preacher_message_subject);
+                            et.setText("");
+
+                        }
+
+                    });
                 }
 
 
