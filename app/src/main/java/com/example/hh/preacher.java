@@ -67,7 +67,7 @@ public class preacher extends AppCompatActivity {
 
 
         //check whether preacher logged correctly
-        if(!uname.equals("rony")||!pword.equals("ronypreacher"))
+        if(!uname.equals("rony")||!pword.equals("houseofhope"))
         {
 
             Intent intent = new Intent(context, MainActivity.class);
